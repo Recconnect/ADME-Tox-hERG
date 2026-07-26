@@ -16,3 +16,4 @@ venv/
 *.pkl
 *.npy
 *.npz
+catboost_info/

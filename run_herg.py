@@ -35,6 +35,7 @@ import warnings
 
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 warnings.filterwarnings("ignore")
+sys.stdout.reconfigure(line_buffering=True, encoding="utf-8")
 
 import numpy as np
 from pathlib import Path
@@ -201,10 +202,13 @@ def run_tdc_evaluation(group, benchmark, protocol: str, seeds: list[int]) -> dic
 
         log(f"  [{timer.ts()}] Seed {seed}: AUROC = {auroc:.4f}")
 
-    # TDC ensemble evaluation
-    results = group.evaluate_many(predictions_list)
+    # TDC ensemble evaluation (requires >= 5 seeds)
+    if len(predictions_list) >= 5:
+        results = group.evaluate_many(predictions_list)
+    else:
+        results = {"note": f"Need >= 5 seeds for TDC leaderboard (have {len(predictions_list)})"}
     ens_auroc = np.mean(individual_aurocs)
-    std_auroc = np.std(individual_auroc := individual_aurocs)
+    std_auroc = np.std(individual_aurocs)
 
     # Additional metrics on ensemble predictions
     avg_preds = np.mean([p[name] for p in predictions_list], axis=0)

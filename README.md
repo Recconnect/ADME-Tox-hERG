@@ -2,19 +2,21 @@
 
 CatBoost classifier for hERG cardiotoxicity prediction. Submitted to the [TDC ADMET Leaderboard](https://tdcommons.ai/benchmark/admet_group/20herg/).
 
-**AUROC = 0.8865** (5-seed ensemble) — beats TDC SOTA 0.880 (MapLight+GNN).
+**AUROC = 0.883** (5-seed ensemble, TDC metric) — beats TDC SOTA 0.880 (MapLight+GNN).
 
 ## Results
 
 | Metric | Value |
 |--------|-------|
-| **Ensemble AUROC** | **0.8865 ± 0.006** |
+| **TDC Ensemble AUROC** | **0.883 ± 0.006** |
 | Ensemble AUPRC | 0.9539 |
 | Ensemble F1 | 0.9005 |
 | TDC SOTA (MapLight+GNN) | 0.880 ± 0.002 |
-| **Gap to SOTA** | **+0.0065** |
+| **Gap to SOTA** | **+0.003** |
 
-Individual seed results: `[0.8832, 0.8862, 0.8717, 0.8865, 0.8885]` (4/5 beat SOTA).
+Individual seed AUROCs: `[0.8832, 0.8862, 0.8717, 0.8865, 0.8885]` (4/5 beat SOTA).
+
+> TDC reports mean ± std of individual seed AUROCs (rounded to 3 decimals).
 
 ## Quick Start
 
@@ -64,7 +66,7 @@ Alternatively, `--protocol tdc-standard` uses TDC's `get_train_valid_split()` fo
 
 1. **iterations=1000 is optimal**: CatBoost default outperforms 2000-3000 on 523 samples (overfitting)
 2. **Multi-scale Morgan COUNT**: radii [2,3,4,5,6] captures substructures at multiple scales
-3. **Radius 5 helps**: adding r=5 improves from 0.8532 to 0.8865 on Morgan-only
+3. **Radius 5 helps**: adding r=5 improves from 0.853 to 0.883 on Morgan-only
 4. **thread_count=1**: deterministic, reproducible results
 
 ## Hardware
