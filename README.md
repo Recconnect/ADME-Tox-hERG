@@ -20,11 +20,13 @@ Individual seed AUROCs: `[0.8832, 0.8862, 0.8717, 0.8865, 0.8885]` (4/5 beat SOT
 
 ## Quick Start
 
+> **Requires internet connection** on first run (TDC auto-downloads benchmark data to `data/`).
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
 
-# Run evaluation (MapLight protocol)
+# Run evaluation (MapLight protocol, 5 seeds, ~8 min)
 python run_herg.py
 
 # Run with TDC-standard protocol (train/valid split)
@@ -33,6 +35,8 @@ python run_herg.py --protocol tdc-standard
 # Custom seeds
 python run_herg.py --seeds 1,2,3,4,5,6,7,8,9,10
 ```
+
+Expected output: `AUROC = 0.883 ± 0.006` (TDC metric), results saved to `output/herg_results.json`.
 
 ## Approach
 
@@ -68,6 +72,16 @@ Alternatively, `--protocol tdc-standard` uses TDC's `get_train_valid_split()` fo
 2. **Multi-scale Morgan COUNT**: radii [2,3,4,5,6] captures substructures at multiple scales
 3. **Radius 5 helps**: adding r=5 improves from 0.853 to 0.883 on Morgan-only
 4. **thread_count=1**: deterministic, reproducible results
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| `pip install rdkit` fails | Use `pip install rdkit>=2024.3`. On Windows, ensure Python 3.10+. On Mac/Linux, try `conda install -c conda-forge rdkit` |
+| Unicode output error on Windows | The script sets `sys.stdout.reconfigure(encoding="utf-8")`. If still fails, run: `set PYTHONIOENCODING=utf-8` before execution |
+| TDC download fails | Check internet connection. Data is cached in `data/` — delete and re-run if corrupted |
+| Different AUROC values | Ensure `thread_count=1` (default). Multi-threaded CatBoost can give slightly different results |
+| `Descriptors._descList` error | Pin RDKit version: `pip install rdkit==2024.03.3`. This uses a private API that may change in future RDKit versions |
 
 ## Hardware
 
