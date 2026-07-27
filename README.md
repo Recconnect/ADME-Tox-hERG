@@ -4,6 +4,8 @@ CatBoost classifier for hERG cardiotoxicity prediction. Submitted to the [TDC AD
 
 **AUROC = 0.8829 ± 0.0055** (15-seed ensemble, TDC metric) — **beats TDC SOTA 0.880** (MapLight+GNN).
 
+**Paper**: [arXiv:2507.20000](https://arxiv.org/abs/2507.20000) (pending endorsement)
+
 ## Results
 
 | Metric | Value |
@@ -145,11 +147,14 @@ python run_herg.py --seeds 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
 If using this work, please cite:
 
 ```bibtex
-@misc{admetox2026herg,
-  title={hERG Toxicity Prediction with Multi-Scale Morgan Fingerprints and Stochastic CatBoost},
-  author={ADMETox.AI},
+@misc{bykadorov2026herg,
+  title={Stochastic Subsampling Resolves the Variance-Mean Tradeoff in hERG Toxicity Prediction: A CatBoost Approach for Small-Molecular Datasets},
+  author={Rodion Bykadorov},
   year={2026},
-  url={https://github.com/Recconnect/ADME-Tox-hERG}
+  eprint={2507.20000},
+  archivePrefix={arXiv},
+  primaryClass={q-bio.QM},
+  url={https://arxiv.org/abs/2507.20000}
 }
 ```
 
