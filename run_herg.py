@@ -6,15 +6,15 @@ ADMETox.AI submission for the TDC ADMET Leaderboard (hERG toxicity).
 
 Pipeline:
   Features: Morgan COUNT [2,3,4,5,6] (5120) + RDKit2D (217) + TopTorsion (512) = 5849 dims
-  Model:    CatBoost (iterations=1000, random_strength=2)
+  Model:    CatBoost (iterations=1000, random_strength=2, subsample=0.5)
   Protocol: Train on all train_val (MapLight protocol), no validation, no early stopping
-  Seeds:    [1, 2, 3, 4, 5] (TDC minimum)
+  Seeds:    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
 Result:
-  AUROC = 0.8865 (5-seed ensemble) vs TDC SOTA 0.880 (MapLight+GNN)
+  AUROC = 0.8829 ± 0.0055 (15-seed ensemble) vs TDC SOTA 0.880 (MapLight+GNN)
 
 Usage:
-  python run_herg.py                          # Run with default MapLight protocol
+  python run_herg.py                          # Run with default MapLight protocol, 15 seeds
   python run_herg.py --protocol tdc-standard  # Run with TDC train/valid split
   python run_herg.py --seeds 1,2,3,4,5        # Custom seeds
 
@@ -59,7 +59,7 @@ for ch in ["rdApp.info", "rdApp.warning", "rdApp.error", "rdApp.debug"]:
 # ---------------------------------------------------------------------------
 RADII = [2, 3, 4, 5, 6]
 NBITS = 1024
-SEEDS = [1, 2, 3, 4, 5]
+SEEDS = list(range(1, 16))  # 15 seeds for reliable evaluation
 DATA_DIR = Path(__file__).parent / "data"
 OUTPUT_DIR = Path(__file__).parent / "output"
 
@@ -139,10 +139,13 @@ def train_predict(X_train: np.ndarray, y_train: np.ndarray,
     model = cb.CatBoostClassifier(
         iterations=1000,
         random_strength=2,
+        subsample=0.5,
+        sampling_frequency="PerTree",
         loss_function="Logloss",
         random_seed=seed,
         verbose=0,
         thread_count=1,
+        allow_writing_files=False,
     )
     model.fit(X_train, y_train)
     return model.predict_proba(X_test)[:, 1]
@@ -247,8 +250,8 @@ def main():
         help="Training protocol: 'maplight' (train all) or 'tdc-standard' (train/valid split)"
     )
     parser.add_argument(
-        "--seeds", type=str, default="1,2,3,4,5",
-        help="Comma-separated random seeds (default: 1,2,3,4,5)"
+        "--seeds", type=str, default="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
+        help="Comma-separated random seeds (default: 1-15)"
     )
     args = parser.parse_args()
     seeds = [int(s) for s in args.seeds.split(",")]
@@ -258,7 +261,7 @@ def main():
     log("  ADMETox.AI | https://github.com/Recconnect/ADME-Tox-hERG")
     log("=" * 60)
     log(f"  Features:    Morgan COUNT [2-6] + RDKit2D + TopTorsion = 5849d")
-    log(f"  Model:       CatBoost (iter=1000, rs=2, tc=1)")
+    log(f"  Model:       CatBoost (iter=1000, rs=2, subsample=0.5, PerTree)")
     log(f"  Protocol:    {args.protocol}")
     log(f"  Seeds:       {seeds}")
     log("=" * 60)
@@ -284,6 +287,8 @@ def main():
     log(f"  Ensemble AUPRC: {results['ensemble_auprc']:.4f}")
     log(f"  Ensemble F1:    {results['ensemble_f1']:.4f}")
     log(f"  TDC evaluate:   {results['tdc_results']}")
+    log(f"  Features:       5849d (Morgan[2-6] + RDKit2D + TopTorsion)")
+    log(f"  Model:          CatBoost (subsample=0.5, sampling_frequency=PerTree)")
 
     if results["ensemble_auroc"] > 0.880:
         log(f"\n  *** BEAT SOTA 0.880 by +{results['ensemble_auroc'] - 0.880:.4f} ***")

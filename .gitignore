@@ -6,7 +6,13 @@ __pycache__/
 dist/
 build/
 *.so
-data/
+data/*
+!data/admet_group/
+data/admet_group/*
+!data/admet_group/herg/
+data/admet_group/herg/*
+!data/admet_group/herg/test.csv
+!data/admet_group/herg/train_val.csv
 output/
 .env
 *.log
@@ -17,3 +23,5 @@ venv/
 *.npy
 *.npz
 catboost_info/
+pretrained_gin/
+.DS_Store
