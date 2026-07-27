@@ -4,7 +4,7 @@ CatBoost classifier for hERG cardiotoxicity prediction. Submitted to the [TDC AD
 
 **AUROC = 0.8829 ± 0.0055** (15-seed ensemble, TDC metric) — **beats TDC SOTA 0.880** (MapLight+GNN).
 
-**Paper**: [arXiv:2507.20000](https://arxiv.org/abs/2507.20000) (pending endorsement)
+**Paper**: [10.5281/zenodo.21628605](https://doi.org/10.5281/zenodo.21628605)
 
 ## Results
 
@@ -151,10 +151,8 @@ If using this work, please cite:
   title={Stochastic Subsampling Resolves the Variance-Mean Tradeoff in hERG Toxicity Prediction: A CatBoost Approach for Small-Molecular Datasets},
   author={Rodion Bykadorov},
   year={2026},
-  eprint={2507.20000},
-  archivePrefix={arXiv},
-  primaryClass={q-bio.QM},
-  url={https://arxiv.org/abs/2507.20000}
+  doi={10.5281/zenodo.21628605},
+  url={https://doi.org/10.5281/zenodo.21628605}
 }
 ```
 
