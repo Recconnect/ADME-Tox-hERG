@@ -13,7 +13,8 @@ data/admet_group/*
 data/admet_group/herg/*
 !data/admet_group/herg/test.csv
 !data/admet_group/herg/train_val.csv
-output/
+output/*
+!output/herg_results.json
 .env
 *.log
 .venv/

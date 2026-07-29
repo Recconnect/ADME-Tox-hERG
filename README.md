@@ -28,8 +28,9 @@ Individual seed AUROCs (15 seeds):
 > **Requires internet connection** on first run (TDC auto-downloads benchmark data to `data/`).
 
 ```bash
-# Install dependencies
+# Install dependencies (PyTDC needs --no-deps due to incompatible optional deps on Python 3.12)
 pip install -r requirements.txt
+pip install PyTDC>=1.1.0 --no-deps
 
 # Run evaluation (MapLight protocol, 15 seeds, ~25 min)
 python run_herg.py
@@ -51,8 +52,9 @@ To reproduce our results **exactly**, use the same environment:
 # Python 3.10+
 python --version  # Should be >= 3.10
 
-# Install exact versions tested
-pip install rdkit>=2024.9 catboost>=1.2.10 numpy pandas scikit-learn pytdc
+# Install dependencies
+pip install -r requirements.txt
+pip install PyTDC --no-deps
 
 # Verify versions
 python -c "import rdkit; print(rdkit.__version__)"
@@ -126,6 +128,7 @@ Alternatively, `--protocol tdc-standard` uses TDC's `get_train_valid_split()` fo
 | Different AUROC values | Ensure `thread_count=1` (default). Multi-threaded CatBoost can give slightly different results |
 | `Descriptors._descList` error | Pin RDKit version: `pip install rdkit==2024.03.3`. This uses a private API that may change in future RDKit versions |
 | CatBoost `allow_writing_files` error | Add `allow_writing_files=False` to CatBoost params to avoid UnicodeDecodeError |
+| `pip install -r requirements.txt` fails on PyTDC | PyTDC 1.1.15 has a broken optional dep. Run: `pip install PyTDC --no-deps` |
 
 ## Hardware
 
@@ -136,7 +139,8 @@ Alternatively, `--protocol tdc-standard` uses TDC's `get_train_valid_split()` fo
 
 ```bash
 # Exact environment
-pip install rdkit>=2024.3 catboost>=1.2 numpy pandas scikit-learn pytdc
+pip install -r requirements.txt
+pip install PyTDC --no-deps
 
 # Run with same seeds → identical results
 python run_herg.py --seeds 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
